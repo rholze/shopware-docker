@@ -30,16 +30,20 @@ services:
       - redis
 
   worker:
-    build: .
-    restart: unless-stopped
-    volumes:
-      - shopware_data:/var/www/html
-    command: >
-      sh -c "sleep 30 &&
-             php bin/console messenger:consume async --time-limit=3600 --memory-limit=256M"
-    depends_on:
-      - db
-      - redis
+  build: .
+  restart: unless-stopped
+  volumes:
+    - shopware_data:/var/www/html
+  environment:
+    APP_ENV: prod
+    DATABASE_URL: "mysql://shopware:shopware@db:3306/shopware"
+    REDIS_URL: "redis://redis:6379"
+  command: >
+    sh -c "sleep 30 &&
+           php bin/console messenger:consume async --time-limit=3600 --memory-limit=256M"
+  depends_on:
+    - db
+    - redis
 
   nginx:
     image: nginx:latest
