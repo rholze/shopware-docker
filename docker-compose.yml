@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
     volumes:
       - shopware_data:/var/www/html
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d
     depends_on:
       - php
 
