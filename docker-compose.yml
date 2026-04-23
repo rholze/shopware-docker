@@ -26,8 +26,10 @@ services:
       DATABASE_URL: "mysql://shopware:shopware@db:3306/shopware"
       REDIS_URL: "redis://redis:6379"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
 
   worker:
     build: .
@@ -42,9 +44,11 @@ services:
       - sh
       - -c
       - sleep 30 && php bin/console messenger:consume async --time-limit=3600 --memory-limit=256M
-  depends_on:
-    - db
-    - redis
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
 
   nginx:
     image: nginx:latest
@@ -53,7 +57,8 @@ services:
       - shopware_data:/var/www/html
       - ./nginx:/etc/nginx/conf.d
     depends_on:
-      - php
+      php:
+        condition: service_started
 
 volumes:
   db_data:
