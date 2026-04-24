@@ -11,6 +11,7 @@ if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
     cd /var/www/html
 
     php -d memory_limit=512M bin/console system:install \
+        --drop-database \
         --create-database \
         --basic-setup \
         --shop-name="Mein Shop" \
