@@ -39,12 +39,6 @@ services:
       DATABASE_URL: "mysql://shopware:shopware@db:3306/shopware"
       REDIS_URL: "redis://redis:6379"
       PHP_MEMORY_LIMIT: 512M
-    healthcheck:
-      test: ["CMD-SHELL", "pgrep php-fpm || exit 1"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-      start_period: 20s
     depends_on:
       db:
         condition: service_started
@@ -80,15 +74,9 @@ services:
     restart: unless-stopped
     networks:
       - app
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
-      interval: 5s
-      timeout: 3s
-      retries: 3
-      start_period: 30s
     depends_on:
       php:
-        condition: service_healthy
+        condition: service_started
 
 volumes:
   db_data:
