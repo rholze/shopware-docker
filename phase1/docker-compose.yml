@@ -27,6 +27,7 @@ services:
       APP_ENV: prod
       APP_URL: https://shopware.myhobby-ki.de
       PHP_MEMORY_LIMIT: 512M
+      FORCE_INSTALL: ${FORCE_INSTALL:-0}
     depends_on:
       db:
         condition: service_started
