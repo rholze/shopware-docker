@@ -10,18 +10,17 @@ if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
 
     cd /var/www/html
 
-    php bin/console system:install \
+    php -d memory_limit=512M bin/console system:install \
         --create-database \
         --basic-setup \
         --shop-name="Mein Shop" \
         --shop-email="admin@example.com" \
-        --admin-email="admin@example.com" \
-        --admin-password="shopware" \
-        --admin-firstname="Admin" \
-        --admin-lastname="User" \
         --shop-locale="de-DE" \
         --shop-currency="EUR" \
+        --skip-assets-install \
         --no-interaction
+
+    php -d memory_limit=512M bin/console assets:install
 
     echo ">>> Konfiguriere Redis..."
 
@@ -29,7 +28,7 @@ if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
     echo "SHOPWARE_CACHE_BACKEND_OPTIONS=redis://redis:6379" >> .env
     echo "SHOPWARE_SESSION_STORAGE=redis" >> .env
 
-    php bin/console cache:clear
+    php -d memory_limit=512M bin/console cache:clear
 fi
 
 php-fpm

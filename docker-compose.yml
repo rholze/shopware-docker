@@ -25,7 +25,7 @@ services:
       APP_ENV: prod
       DATABASE_URL: "mysql://shopware:shopware@db:3306/shopware"
       REDIS_URL: "redis://redis:6379"
-      PHP_MEMORY_LIMIT: 1024M
+      PHP_MEMORY_LIMIT: 512M
     depends_on:
       db:
         condition: service_started
@@ -41,7 +41,7 @@ services:
       APP_ENV: prod
       DATABASE_URL: "mysql://shopware:shopware@db:3306/shopware"
       REDIS_URL: "redis://redis:6379"
-      PHP_MEMORY_LIMIT: 1024M
+      PHP_MEMORY_LIMIT: 512M
     command:
       - sh
       - -c
