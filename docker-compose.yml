@@ -19,6 +19,8 @@ services:
   php:
     build: .
     restart: unless-stopped
+    expose:
+      - "9000"
     volumes:
       - shopware_data:/var/www/html
     environment:
@@ -26,6 +28,11 @@ services:
       DATABASE_URL: "mysql://shopware:shopware@db:3306/shopware"
       REDIS_URL: "redis://redis:6379"
       PHP_MEMORY_LIMIT: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     depends_on:
       db:
         condition: service_started
@@ -57,6 +64,8 @@ services:
       context: .
       dockerfile: nginx.Dockerfile
     restart: unless-stopped
+    environment:
+      PHP_HOST: ${PHP_HOST:-127.0.0.1}
     volumes:
       - shopware_data:/var/www/html
     depends_on:
