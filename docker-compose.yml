@@ -40,11 +40,11 @@ services:
       REDIS_URL: "redis://redis:6379"
       PHP_MEMORY_LIMIT: 512M
     healthcheck:
-      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
+      test: ["CMD-SHELL", "pgrep php-fpm || exit 1"]
       interval: 5s
       timeout: 3s
       retries: 5
-      start_period: 60s
+      start_period: 20s
     depends_on:
       db:
         condition: service_started
