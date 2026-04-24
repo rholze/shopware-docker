@@ -11,6 +11,7 @@ if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
     cd /var/www/html
 
     mkdir -p var/cache var/log
+    chmod -R 777 var/cache var/log
 
     php -d memory_limit=512M bin/console asset:install
 
