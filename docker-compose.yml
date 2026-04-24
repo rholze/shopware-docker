@@ -1,9 +1,15 @@
 version: '3.8'
 
+networks:
+  app:
+    driver: bridge
+
 services:
   db:
     image: mariadb:10.11
     restart: unless-stopped
+    networks:
+      - app
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: shopware
@@ -15,12 +21,16 @@ services:
   redis:
     image: redis:7
     restart: unless-stopped
+    networks:
+      - app
 
   php:
     build: .
     restart: unless-stopped
     expose:
       - "9000"
+    networks:
+      - app
     volumes:
       - shopware_data:/var/www/html
     environment:
@@ -28,11 +38,6 @@ services:
       DATABASE_URL: "mysql://shopware:shopware@db:3306/shopware"
       REDIS_URL: "redis://redis:6379"
       PHP_MEMORY_LIMIT: 512M
-    healthcheck:
-      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
     depends_on:
       db:
         condition: service_started
@@ -42,6 +47,8 @@ services:
   worker:
     build: .
     restart: unless-stopped
+    networks:
+      - app
     volumes:
       - shopware_data:/var/www/html
     environment:
@@ -64,10 +71,8 @@ services:
       context: .
       dockerfile: nginx.Dockerfile
     restart: unless-stopped
-    environment:
-      PHP_HOST: ${PHP_HOST:-127.0.0.1}
-    volumes:
-      - shopware_data:/var/www/html
+    networks:
+      - app
     depends_on:
       php:
         condition: service_started
