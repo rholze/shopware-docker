@@ -1,5 +1,8 @@
 FROM php:8.2-fpm
 
+RUN sed -i 's/memory_limit = .*/memory_limit = 512M/' /usr/local/etc/php/conf.d/docker-php-memory-limit.ini || \
+    echo 'memory_limit = 512M' > /usr/local/etc/php/conf.d/docker-php-memory-limit.ini
+
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
