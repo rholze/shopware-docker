@@ -1,7 +1,9 @@
 #!/bin/bash
 
-if [ ! -f /var/www/html/bin/console ]; then
+if [ ! -f /var/www/html/bin/console ] || [ "$FORCE_INSTALL" = "1" ]; then
     echo ">>> Installiere Shopware..."
+
+    rm -rf /var/www/html/*
 
     composer create-project shopware/production /var/www/html
 
