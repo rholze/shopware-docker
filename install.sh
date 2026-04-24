@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
-    echo ">>> Installiere Shopware..."
+    echo ">>> Installiere Shopware Dateien..."
 
     rm -rf /var/www/html/*
     rm -rf /var/www/html/.*
@@ -10,32 +10,11 @@ if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
 
     cd /var/www/html
 
-    rm -f .env
-    touch .env
-    echo "APP_ENV=prod" >> .env
-    echo "DATABASE_URL=mysql://shopware:shopware@db:3306/shopware" >> .env
-    echo "REDIS_URL=redis://redis:6379" >> .env
+    mkdir -p var/cache var/log
 
-    php -d memory_limit=512M bin/console system:install \
-        --drop-database \
-        --create-database \
-        --basic-setup \
-        --shop-name="Mein Shop" \
-        --shop-email="admin@example.com" \
-        --shop-locale="de-DE" \
-        --shop-currency="EUR" \
-        --skip-assets-install \
-        --no-interaction
+    php -d memory_limit=512M bin/console asset:install
 
-    php -d memory_limit=512M bin/console assets:install
-
-    echo ">>> Konfiguriere Redis..."
-
-    echo "SHOPWARE_CACHE_BACKEND=redis" >> .env
-    echo "SHOPWARE_CACHE_BACKEND_OPTIONS=redis://redis:6379" >> .env
-    echo "SHOPWARE_SESSION_STORAGE=redis" >> .env
-
-    php -d memory_limit=512M bin/console cache:clear
+    echo ">>> Shopware Dateien installiert. Starte Web-Installer unter /installer"
 fi
 
 php-fpm
