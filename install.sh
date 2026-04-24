@@ -11,7 +11,8 @@ if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
     cd /var/www/html
 
     mkdir -p var/cache var/log
-    chmod -R 777 var/cache var/log public/thumbnail public/media
+    chmod -R 777 var/cache var/log public/thumbnail public/media public/robots.txt
+    chown -R www-data:www-data /var/www/html
 
     php -d memory_limit=512M bin/console asset:install --no-interaction
     php -d memory_limit=512M bin/console build:theme --no-interaction || true
