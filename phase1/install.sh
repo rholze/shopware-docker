@@ -6,7 +6,7 @@ php-fpm &
 
 sleep 3
 
-if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
+if [ "$FORCE_INSTALL" = "1" ]; then
     echo ">>> Shopware installation..."
     
     rm -rf /var/www/html/*
