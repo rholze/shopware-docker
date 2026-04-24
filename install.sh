@@ -1,9 +1,9 @@
 #!/bin/bash
 
-mkdir -p /var/run/php
+php-fpm
 
 if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
-    echo ">>> Installiere Shopware Dateien..."
+    echo ">>> Shopware installation..."
 
     rm -rf /var/www/html/*
     rm -rf /var/www/html/.*
@@ -12,16 +12,12 @@ if [ ! -f /var/www/html/platforms.php ] || [ "$FORCE_INSTALL" = "1" ]; then
 
     cd /var/www/html
 
-    mkdir -p var/cache var/log
+    mkdir -p var/cache var/log public/thumbnail public/media
     chmod -R 777 var/cache var/log var/logs public/thumbnail public/media public/robots.txt 2>/dev/null || true
-
-    php-fpm &
-
-    sleep 5
 
     php -d memory_limit=512M bin/console asset:install --no-interaction
 
-    echo ">>> Shopware Dateien installiert."
+    echo ">>> Installation done."
 fi
 
-php-fpm
+exec php-fpm

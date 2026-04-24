@@ -19,15 +19,15 @@ RUN apt-get update && apt-get install -y \
     opcache \
     bcmath
 
-# Redis Extension (WICHTIG!)
 RUN pecl install redis && docker-php-ext-enable redis
 
-# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
 COPY install.sh /install.sh
 RUN chmod +x /install.sh
+
+VOLUME ["/var/www/html", "/var/run/php"]
 
 CMD ["/install.sh"]
