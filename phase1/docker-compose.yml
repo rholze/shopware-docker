@@ -25,9 +25,11 @@ services:
       - shopware_data:/var/www/html
     environment:
       APP_ENV: prod
-      APP_URL: https://shopware.myhobby-ki.de
+      APP_URL: ${SERVICE_FQDN_NGINX:-https://shopware.myhobby-ki.de}
       PHP_MEMORY_LIMIT: 512M
       FORCE_INSTALL: ${FORCE_INSTALL:-0}
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_started

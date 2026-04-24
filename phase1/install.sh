@@ -2,11 +2,15 @@
 
 set -e
 
-echo ">>> FORCE_INSTALL=$FORCE_INSTALL"
+#!/bin/bash
+
+echo ">>> FORCE_INSTALL start"
 
 php-fpm &
 
-sleep 5
+sleep 10
+
+FORCE_INSTALL=1
 
 if [ "$FORCE_INSTALL" = "1" ]; then
     echo ">>> Shopware installation..."
