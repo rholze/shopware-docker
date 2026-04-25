@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shopware
+      MYSQL_USER: $SERVICE_USER_DB
+      MYSQL_PASSWORD: $SERVICE_PASSWORD_DB
+    volumes:
+      - shopware-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  php:
+    image: php:8.2-fpm
+    restart: unless-stopped
+    volumes:
+      - shopware-data:/var/www/html
+    environment:
+      APP_ENV: prod
+      APP_URL: $SERVICE_URL_NGINX
+      PHP_MEMORY_LIMIT: 512M
+    depends_on:
+      db:
+        condition: service_started
+
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+      - shopware-data:/var/www/html
+    depends_on:
+      php:
+        condition: service_started
+
+volumes:
+  shopware-db:
+  shopware-data:
