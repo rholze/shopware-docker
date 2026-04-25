@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-db:
+  db:
     image: mariadb:10.11
     restart: unless-stopped
     environment:
@@ -19,10 +19,6 @@ db:
     restart: unless-stopped
     volumes:
       - shopware-data:/var/www/html
-    environment:
-      APP_ENV: prod
-      APP_URL: ${SERVICE_FQDN_NGINX:-https://shopware1.myhobby-ki.de}
-      PHP_MEMORY_LIMIT: 512M
     depends_on:
       - db
 
@@ -35,8 +31,6 @@ db:
       - shopware-data:/var/www/html
     depends_on:
       - php
-    environment:
-      APP_URL: ${SERVICE_FQDN_NGINX:-https://shopware1.myhobby-ki.de}
 
 volumes:
   shopware-db:
