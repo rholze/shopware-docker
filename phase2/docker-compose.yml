@@ -19,7 +19,7 @@ services:
 
   php:
     build:
-      context: .
+      context: ./phase2
       dockerfile: php.Dockerfile
     restart: unless-stopped
     volumes:
@@ -34,7 +34,7 @@ services:
 
   nginx:
     build:
-      context: .
+      context: ./phase2
       dockerfile: nginx.Dockerfile
     restart: unless-stopped
     volumes:
