@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  db:
+db:
     image: mariadb:10.11
     restart: unless-stopped
     environment:
@@ -11,11 +11,6 @@ services:
       MYSQL_PASSWORD: $SERVICE_PASSWORD_DB
     volumes:
       - shopware-db:/var/lib/mysql
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   php:
     build:
@@ -29,8 +24,7 @@ services:
       APP_URL: $SERVICE_URL_NGINX
       PHP_MEMORY_LIMIT: 512M
     depends_on:
-      db:
-        condition: service_healthy
+      - db
 
   nginx:
     build:
@@ -40,13 +34,7 @@ services:
     volumes:
       - shopware-data:/var/www/html
     depends_on:
-      php:
-        condition: service_started
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - php
 
 volumes:
   shopware-db:
